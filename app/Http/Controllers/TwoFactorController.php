@@ -27,7 +27,7 @@ class TwoFactorController extends Controller
             'code' => 'required|integer',
         ]);
 
-        $user = auth()->user;
+        $user = auth()->user();
 
         if($request->code == $user->two_factor_code) {
             session(['two_factor_authenticated' => true]);
