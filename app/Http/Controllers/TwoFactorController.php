@@ -9,7 +9,7 @@ class TwoFactorController extends Controller
 {
     public function index()
     {
-        $user = auth()->user;
+        $user = auth()->user();
         $code = rand(100000, 999999);
         $user->two_factor_code = $code;
         $user->save();
@@ -18,7 +18,7 @@ class TwoFactorController extends Controller
             $message->to($user->email)->subject('Two-factor Code');
         });
 
-        return view('auth.two-factor-authentication');
+        return view('auth.two-factor');
     }
 
     public function verify(Request $request)
