@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <form action="{{ route('two-factor-authentication') }}" method="POST">
+    <form action="{{ route('two-factor.verify') }}" method="POST">
     @csrf
         <label for="code">Two-Factor Code</label>
         <input type="text" name="code" id="code" required>
