@@ -12,7 +12,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 // Instalar dependencias de PHP usando Composer
-                sh 'composer install --no-interaction --prefer-dist --optimize-autoloader'
+                sh 'composer install'
             }
         }
 
@@ -26,23 +26,19 @@ pipeline {
         stage('Dependency Track Analysis') {
             steps {
                 // Ejecutar Dependency Track para analizar las dependencias
-                sh '''
-                dependency-track --project d11f0baf-29b4-4035-9110-b484c2018f5f --api-key odt_YMvH1o1YLuHFLBPovCCd22eli4QqcONb --file dependency-track-results.json
-                '''
+                sh 'dependency-track --project d11f0baf-29b4-4035-9110-b484c2018f5f --api-key odt_YMvH1o1YLuHFLBPovCCd22eli4QqcONb --file dependency-track-results.json'
             }
         }
 
         stage('Generate Report') {
             steps {
-                // Usar Pandoc para generar un informe a partir del resultado de Dependency Track
+                // Generar el archivo Markdown con los resultados del análisis
                 sh '''
                 #!/bin/bash
-
-                # Convertir JSON a Markdown usando jq y Pandoc
                 echo "# Dependency Track Vulnerability Report" > report.md
                 echo "" >> report.md
                 echo "## Vulnerabilities" >> report.md
-                cat dependency-track-results.json | jq -r '.vulnerabilities[] | "### \(.name)\nSeverity: \(.severity)\nDescription: \(.description)\nRecommendations: \(.recommendations)\n"' >> report.md
+                jq -r '.vulnerabilities[] | "### \(.name)\nSeverity: \(.severity)\nDescription: \(.description)\nRecommendations: \(.recommendations)\n"' dependency-track-results.json >> report.md
 
                 # Convertir Markdown a PDF usando Pandoc
                 pandoc report.md -o report.pdf
