@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clonar el repositorio desde Git
-                git credentialsId: 'ssh-credentials-id', git branch: 'main', url: 'git@github.com:JaimeRax/laravel-2FA-google.git'
+                git credentialsId: 'ssh-credentials-id', branch: 'main', url: 'git@github.com:JaimeRax/laravel-2FA-google.git'
             }
         }
 
@@ -38,7 +38,7 @@ pipeline {
         stage('Generate Report') {
             steps {
                 script {
-                     // Verificar si jq y pandoc están instalados
+                    // Verificar si jq y pandoc están instalados
                     sh 'which jq || { echo "jq not found"; exit 1; }'
                     sh 'which pandoc || { echo "Pandoc not found"; exit 1; }'
 
