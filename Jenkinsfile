@@ -36,12 +36,16 @@ pipeline {
             steps {
                 // Usar Pandoc para generar un informe a partir del resultado de Dependency Track
                 sh '''
-                pandoc -s -o report.pdf <<EOF
-                # Dependency Track Vulnerability Report
+                #!/bin/bash
 
-                ## Vulnerabilities
-                $(cat dependency-track-results.json | jq -r '.vulnerabilities[] | "### \(.name)\nSeverity: \(.severity)\nDescription: \(.description)\nRecommendations: \(.recommendations)\n"')
-                EOF
+                # Convertir JSON a Markdown usando jq y Pandoc
+                echo "# Dependency Track Vulnerability Report" > report.md
+                echo "" >> report.md
+                echo "## Vulnerabilities" >> report.md
+                cat dependency-track-results.json | jq -r '.vulnerabilities[] | "### \(.name)\nSeverity: \(.severity)\nDescription: \(.description)\nRecommendations: \(.recommendations)\n"' >> report.md
+
+                # Convertir Markdown a PDF usando Pandoc
+                pandoc report.md -o report.pdf
                 '''
             }
         }
@@ -61,4 +65,3 @@ pipeline {
         }
     }
 }
-
