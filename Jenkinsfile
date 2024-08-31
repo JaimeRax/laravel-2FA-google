@@ -37,7 +37,7 @@ stages {
             echo "" >> report.md
             echo "## Vulnerabilities" >> report.md
 
-            cat dependency-track-results.json | jq -r '.vulnerabilities[] | "### \(.name)\nSeverity: \(.severity)\nDescription: \(.description)\nRecommendations: \(.recommendations)\n"' >> report.md
+            cat dependency-track-results.json | jq -r ".vulnerabilities[] | \"### \(.name)\\nSeverity: \(.severity)\\nDescription: \(.description)\\nRecommendations: \(.recommendations)\\n\"" >> report.md
 
             # Convertir Markdown a PDF usando Pandoc
             pandoc report.md -o report.pdf
