@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'php:8.1-cli'
-            args '-v /var/run/docker.sock:/var/run/docker.sock' // Montar Docker socket si es necesario
-        }
-    }
+    agent any
 
     stages {
         stage('Checkout') {
