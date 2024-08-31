@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clonar el repositorio desde Git
-                git branch: 'main', url: 'git@github.com:JaimeRax/laravel-2FA-google.git'
+                git credentialsId: 'ssh-credentials-id', git branch: 'main', url: 'git@github.com:JaimeRax/laravel-2FA-google.git'
             }
         }
 
