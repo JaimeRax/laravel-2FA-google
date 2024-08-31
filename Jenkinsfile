@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'php:8.1-cli'
+            args '-v /var/run/docker.sock:/var/run/docker.sock' // Montar Docker socket si es necesario
+        }
+    }
 
     stages {
         stage('Checkout') {
@@ -10,12 +15,6 @@ pipeline {
         }
 
         stage('Install Dependencies') {
-            agent {
-                docker {
-                    image 'php:8.1-cli'  // Usa una imagen con PHP preinstalado
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'  // Montar Docker socket si es necesario
-                }
-            }
             steps {
                 // Instalar dependencias de PHP usando Composer
                 sh 'curl -sS https://getcomposer.org/installer | php'
@@ -24,11 +23,6 @@ pipeline {
         }
 
         stage('Run Tests') {
-            agent {
-                docker {
-                    image 'php:8.1-cli'
-                }
-            }
             steps {
                 // Ejecutar las pruebas de PHPUnit
                 sh './vendor/bin/phpunit'
