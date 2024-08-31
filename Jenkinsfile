@@ -34,10 +34,7 @@ pipeline {
 
         stage('Generate Report') {
             steps {
-                // Verifica el contenido del archivo JSON para ajustar el procesamiento
-                sh 'cat dependency-track-results.json'
-
-                // Generar el informe con Pandoc
+                // Usar Pandoc para generar un informe a partir del resultado de Dependency Track
                 sh '''
                 pandoc -s -o report.pdf <<EOF
                 # Dependency Track Vulnerability Report
