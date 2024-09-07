@@ -1,75 +1,66 @@
 pipeline {
     agent any
 
+    environment {
+        // Variables de entorno que puedes configurar en Jenkins
+        REPO_URL = 'https://github.com/JaimeRax/laravel-2FA-google.git'
+        PROJECT_ID = '5d86a645-d745-48ba-8103-844839eec0e9'
+        REPORT_FILE = 'report.pdf'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                // Clonar el repositorio desde Git
-                git credentialsId: 'ssh-credentials-id', branch: 'main', url: 'git@github.com:JaimeRax/laravel-2FA-google.git'
+                // Clona el código fuente desde el repositorio Git usando la variable de entorno REPO_URL
+                git url: "${env.REPO_URL}"
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                // Instalar dependencias de PHP usando Composer
-                sh 'curl -sS https://getcomposer.org/installer | php'
-                sh 'php composer.phar install --no-interaction --prefer-dist --optimize-autoloader'
+                // Instala dependencias PHP usando Composer
+                sh 'cd laravel-2FA-google'
+                //sh 'composer install'
+                sh 'ls'
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                // Ejecutar las pruebas de PHPUnit
-                sh './vendor/bin/phpunit'
-            }
-        }
-
-        stage('Dependency Track Analysis') {
-            steps {
-                script {
-                    // Verificar si Dependency Track está instalado
-                    sh 'which dependency-track || { echo "Dependency Track not found"; exit 1; }'
-
-                    // Ejecutar Dependency Track para analizar las dependencias
-                    sh 'dependency-track --project d11f0baf-29b4-4035-9110-b484c2018f5f --api-key odt_YMvH1o1YLuHFLBPovCCd22eli4QqcONb --file dependency-track-results.json'
-                }
-            }
-        }
-
-        stage('Generate Report') {
-            steps {
-                script {
-                    // Verificar si jq y pandoc están instalados
-                    sh 'which jq || { echo "jq not found"; exit 1; }'
-                    sh 'which pandoc || { echo "Pandoc not found"; exit 1; }'
-
-                    // Crear un archivo Markdown con los resultados del análisis
-                    sh '''
-                    echo "# Dependency Track Vulnerability Report" > report.md
-                    echo "" >> report.md
-                    echo "## Vulnerabilities" >> report.md
-
-                    cat dependency-track-results.json | jq -r ".vulnerabilities[] | \"### \\(.name)\\nSeverity: \\(.severity)\\nDescription: \\(.description)\\nRecommendations: \\(.recommendations)\\n\"" >> report.md
-
-                    # Convertir Markdown a PDF usando Pandoc
-                    pandoc report.md -o report.pdf
-                    '''
-                }
-            }
-        }
-
-        stage('Archive Report') {
-            steps {
-                // Archivar el reporte generado como artefacto en Jenkins
-                archiveArtifacts artifacts: 'report.pdf', allowEmptyArchive: true
-            }
-        }
+        //stage('Build') {
+        //    steps {
+        //        // Ejecuta el build si es necesario para Laravel
+        //        // Por ejemplo, si tienes scripts específicos para construir el proyecto
+        //        sh 'php artisan migrate' // Asegúrate de que esto sea necesario para tu build
+        //    }
+        //}
+        //
+        //stage('Dependency Track Analysis') {
+        //    steps {
+        //        // Ejecuta el análisis de dependencias con Dependency-Track usando la variable de entorno PROJECT_ID
+        //        sh "dependency-track-cli --analyze --project ${env.PROJECT_ID}"
+        //    }
+        //}
+        //
+        //stage('Generate Report') {
+        //    steps {
+        //        // Genera un informe con Pandoc a partir de los resultados del análisis
+        //        // Asumiendo que los resultados se guardan en results.json
+        //        sh "pandoc results.json -o ${env.REPORT_FILE}"
+        //    }
+        //}
+        //
+        //stage('Archive Report') {
+        //    steps {
+        //        // Archiva el informe generado como un artefacto del build
+        //        archiveArtifacts "${env.REPORT_FILE}"
+        //    }
+        //}
     }
 
     post {
         always {
-            // Limpieza y notificaciones (si es necesario)
+            // Limpia los archivos temporales si es necesario
             cleanWs()
         }
     }
 }
+
