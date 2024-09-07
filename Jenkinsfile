@@ -4,7 +4,7 @@ pipeline {
     environment {
         REPO_URL = 'https://github.com/JaimeRax/laravel-2FA-google.git'
         PROJECT_DIR = 'laravel-2FA-google'
-        PROJECT_ID = 'your_project_id'
+        PROJECT_ID = '5d86a645-d745-48ba-8103-844839eec0e9'
         REPORT_FILE = 'report.pdf'
     }
 
@@ -28,36 +28,6 @@ pipeline {
                 }
             }
         }
-
-        //stage('Build') {
-        //    steps {
-        //        // Ejecuta el build si es necesario para Laravel
-        //        // Por ejemplo, si tienes scripts específicos para construir el proyecto
-        //        sh 'php artisan migrate' // Asegúrate de que esto sea necesario para tu build
-        //    }
-        //}
-        //
-        //stage('Dependency Track Analysis') {
-        //    steps {
-        //        // Ejecuta el análisis de dependencias con Dependency-Track usando la variable de entorno PROJECT_ID
-        //        sh "dependency-track-cli --analyze --project ${env.PROJECT_ID}"
-        //    }
-        //}
-        //
-        //stage('Generate Report') {
-        //    steps {
-        //        // Genera un informe con Pandoc a partir de los resultados del análisis
-        //        // Asumiendo que los resultados se guardan en results.json
-        //        sh "pandoc results.json -o ${env.REPORT_FILE}"
-        //    }
-        //}
-        //
-        //stage('Archive Report') {
-        //    steps {
-        //        // Archiva el informe generado como un artefacto del build
-        //        archiveArtifacts "${env.REPORT_FILE}"
-        //    }
-        //}
     }
 
     post {
