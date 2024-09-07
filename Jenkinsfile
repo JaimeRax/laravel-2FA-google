@@ -2,26 +2,30 @@ pipeline {
     agent any
 
     environment {
-        // Variables de entorno que puedes configurar en Jenkins
         REPO_URL = 'https://github.com/JaimeRax/laravel-2FA-google.git'
-        PROJECT_ID = '5d86a645-d745-48ba-8103-844839eec0e9'
+        PROJECT_DIR = 'laravel-2FA-google'
+        PROJECT_ID = 'your_project_id'
         REPORT_FILE = 'report.pdf'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Clona el código fuente desde el repositorio Git usando la variable de entorno REPO_URL
-                git url: "${env.REPO_URL}"
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                // Instala dependencias PHP usando Composer
-                sh 'cd laravel-2FA-google'
-                //sh 'composer install'
-                sh 'ls'
+                script {
+                    // Verifica si el directorio del proyecto existe
+                    if (!fileExists("${env.PROJECT_DIR}")) {
+                        echo "El directorio ${env.PROJECT_DIR} no existe. Clonando el repositorio."
+                        // Clona el repositorio si el directorio no existe
+                        sh "git clone ${env.REPO_URL}"
+                    } else {
+                        echo "El directorio ${env.PROJECT_DIR} ya existe. Navegando al directorio."
+                    }
+                    // Navega al directorio del proyecto
+                    dir("${env.PROJECT_DIR}") {
+                        // Realiza un ls para listar el contenido del directorio
+                        sh 'ls -la'
+                    }
+                }
             }
         }
 
