@@ -26,6 +26,8 @@ pipeline {
                         // Realiza un ls para listar el contenido del directorio
                         sh 'ls -la'
                     }
+
+                    echo "funcion al 100"
                 }
             }
         }
