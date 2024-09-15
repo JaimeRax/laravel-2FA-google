@@ -12,7 +12,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    echo 'hola mundo'
                     // Verifica si el directorio del proyecto existe
                     if (!fileExists("${env.PROJECT_DIR}")) {
                         echo "El directorio ${env.PROJECT_DIR} no existe. Clonando el repositorio."
