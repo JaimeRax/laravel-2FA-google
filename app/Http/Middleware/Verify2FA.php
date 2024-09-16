@@ -19,6 +19,7 @@ class Verify2FA
         if(auth()->check() && !session('two_factor_authenticated')) {
             return redirect()->route('two-factor.index');
         }
+
         return $next($request);
     }
 }
