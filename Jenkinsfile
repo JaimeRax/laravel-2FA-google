@@ -22,6 +22,7 @@ pipeline {
                     }
                     // Navega al directorio del proyecto
                     dir("${env.PROJECT_DIR}") {
+                        echo "ingresando al directorio"
                         // Realiza un ls para listar el contenido del directorio
                         sh 'ls -la'
                     }
